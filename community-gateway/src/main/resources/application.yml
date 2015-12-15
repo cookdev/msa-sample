@@ -1,0 +1,100 @@
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+
+security:
+  user:
+    password: password
+  sessions: ALWAYS
+
+zuul:
+  routes:
+#   Microservice Routes
+    search:
+      path: /search/**
+      url: http://localhost:9000
+      stripPrefix: false
+    notice:
+      path: /notice/**
+      url: http://localhost:30001
+      stripPrefix: true
+    user:
+      path: /user/**
+      url: http://localhost:30002
+      stripPrefix: false
+
+#   UI Routes
+    ui-root1:
+      path: /
+      url: http://localhost:8081
+    ui-root2:
+      path: /*.{js,html,css}
+      url: http://localhost:8081
+    ui-depth1:
+      path: /**/*.{js,html}
+      url: http://localhost:8081
+
+
+spring:
+  redis:
+    host: 70.50.169.219
+    password: anyframe
+    port: 6379
+  datasource:
+    url: jdbc:postgresql://70.121.244.13:5432/anyframecloud?currentSchema=community-auth
+    username: anyframecloud
+    password: anyframe00
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        
+anyframe:
+  forum:
+    url: https://forum.ssc.com
+    path: /api/user/generate_auth_cookie
+    params: username,password
+  blog:
+    url: https://blog.ssc.com
+    path: /api/user/generate_auth_cookie
+    params: username,password
+  logouturl: http://localhost
+    
+---
+spring:
+  profiles: staging
+zuul:
+  routes:
+#   Microservice Routes
+    search:
+      path: /search/**
+      url: https://search.ssc.com
+      stripPrefix: false
+    notice:
+      path: /notice/**
+      url: http://localhost:9002
+      stripPrefix: true
+    user:
+      path: /user/**
+      url: http://localhost:9003
+      stripPrefix: false
+
+#   UI Routes
+    ui-root1:
+      path: /
+      url: http://localhost:9000
+    ui-root2:
+      path: /*.{js,html,css}
+      url: http://localhost:9000
+    ui-depth1:
+      path: /**/*.{js,html}
+      url: http://localhost:9000  
+anyframe:
+  logouturl: https://www.ssc.com      
+            
